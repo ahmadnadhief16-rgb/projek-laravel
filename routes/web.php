@@ -20,16 +20,27 @@ Route::get('/pendaftaran', function () {
 });
 
 Route::post('/pendaftaran', function (Request $request) {
-    $request->session()->put('santri', [
-        'nama' => $request->nama,
-        'alamat' => $request->alamat,
-        'asal_sekolah' => $request->asal_sekolah
+
+    $request->validate([
+        'nama' => 'required',
+        'alamat' => 'required',
+        'asal_sekolah' => 'required',
+    ]);
+    
+    session([
+        'santri' => [
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'asal_sekolah' => $request->asal_sekolah,
+        ]
     ]);
 
     return redirect('/hasil');
 });
 
-Route::get('/hasil', function (Request $request) {
-    $santri = $request->session()->get('santri');
+Route::get('/hasil', function () {
+
+    $santri = session('santri');
+
     return view('hasil', compact('santri'));
 });
