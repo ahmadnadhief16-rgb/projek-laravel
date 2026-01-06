@@ -1,46 +1,16 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SantriController;
 
 Route::get('/', function () {
-    return view('home');
-});
-
-Route::get('/profil', function () {
-    return view('profil');
+    return view('beranda');
 });
 
 Route::get('/tata-tertib', function () {
     return view('tata-tertib');
 });
 
-Route::get('/pendaftaran', function () {
-    return view('pendaftaran');
-});
+Route::get('/pendaftaran', [SantriController::class, 'create']);
+Route::post('/pendaftaran', [SantriController::class, 'store']);
 
-Route::post('/pendaftaran', function (Request $request) {
-
-    $request->validate([
-        'nama' => 'required',
-        'alamat' => 'required',
-        'asal_sekolah' => 'required',
-    ]);
-    
-    session([
-        'santri' => [
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'asal_sekolah' => $request->asal_sekolah,
-        ]
-    ]);
-
-    return redirect('/hasil');
-});
-
-Route::get('/hasil', function () {
-
-    $santri = session('santri');
-
-    return view('hasil', compact('santri'));
-});
+Route::get('/santri', [SantriController::class, 'index']);
